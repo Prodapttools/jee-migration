@@ -1,14 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<weblogic-application xmlns="http://www.bea.com/ns/weblogic/90">
-	<listener>
-		<listener-class>com.acme.anvil.listener.AnvilWebLifecycleListener</listener-class>
-		<listener-uri>jee-example-services.jar</listener-uri>
-	</listener>
 
-	<module>
-		<name>LogEventQueue</name>
-		<type>JMS</type>
-		<path>LogEventQueue-jms.xml</path>
-	</module>
-	
-</weblogic-application>
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+    <listener>
+        <listener-class>com.acme.anvil.listener.AnvilWebLifecycleListener</listener-class>
+    </listener>
+
+    <!-- JMS configuration should be handled in Java configuration or application properties -->
+</application>

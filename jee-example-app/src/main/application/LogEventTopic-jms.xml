@@ -1,6 +1,12 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
-<weblogic-jms xmlns="http://www.bea.com/ns/weblogic/90">
-	<queue name="LogEventQueue">
-		<jndi-name>jms/LogEventQueue</jndi-name>
-	</queue>
-</weblogic-jms>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="logEventQueue" class="org.springframework.jms.config.QueueProxyFactoryBean">
+        <property name="queueName" value="LogEventQueue"/>
+    </bean>
+
+</beans>

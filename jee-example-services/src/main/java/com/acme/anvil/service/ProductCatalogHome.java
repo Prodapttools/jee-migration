@@ -1,11 +1,9 @@
+
 package com.acme.anvil.service;
 
-import java.rmi.RemoteException;
+import org.springframework.stereotype.Service;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EJBHome;
-
-public interface ProductCatalogHome extends EJBHome {
-	ProductCatalog create() throws CreateException, EJBException, RemoteException;
+@Service
+public class ProductCatalog {
+    // Business logic methods here
 }
