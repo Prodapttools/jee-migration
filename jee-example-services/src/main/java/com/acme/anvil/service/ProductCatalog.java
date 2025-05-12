@@ -1,7 +1,14 @@
+
 package com.acme.anvil.service;
 
-import javax.ejb.EJBObject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface ProductCatalog extends EJBObject {
-	public void populateCatalog();
+@Service
+public class ProductCatalogService {
+
+    @Transactional
+    public void populateCatalog() {
+        // Business logic for populating the catalog
+    }
 }

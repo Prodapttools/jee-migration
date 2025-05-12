@@ -1,51 +1,37 @@
+
 package com.acme.anvil;
 
 import java.io.IOException;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.anvil.service.ItemLookupLocal;
-import com.acme.anvil.service.ItemLookupLocalHome;
+import com.acme.anvil.service.ItemLookupService;
 
-public class AnvilWebServlet extends HttpServlet {
+@RestController
+public class AnvilWebServlet {
 
-	private static final Logger LOG = Logger.getLogger(AnvilWebServlet.class);
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		InitialContext ic;
-		ItemLookupLocalHome lh;
-		ItemLookupLocal local;
-		try {
-			ic = new InitialContext();
-			lh  = (ItemLookupLocalHome)ic.lookup("ejb/ItemLookupLocal");
-			local = lh.create();
-			
-			String itemId = req.getParameter("id");
-			if(StringUtils.isNotBlank(itemId)) {
-				Long id = Long.parseLong(itemId);
-				local.lookupItem(id);
-			}
-		} catch (EJBException e) {
-			LOG.error("Exception creating EJB.", e);
-		} catch (CreateException e) {
-			LOG.error("Exception creating EJB.", e);
-		} catch (NamingException e) {
-			LOG.error("Exception looking up EJB LocalHome.", e);
-		}
-		
-		
-		
-	}
+    private static final Logger LOG = Logger.getLogger(AnvilWebServlet.class);
+
+    @Autowired
+    private ItemLookupService itemLookupService;
+
+    @GetMapping("/lookup")
+    public void doGet(@RequestParam(value = "id", required = false) String itemId) throws IOException {
+        if (StringUtils.isNotBlank(itemId)) {
+            try {
+                Long id = Long.parseLong(itemId);
+                itemLookupService.lookupItem(id);
+            } catch (NumberFormatException e) {
+                LOG.error("Invalid item ID format.", e);
+            } catch (Exception e) {
+                LOG.error("Exception during item lookup.", e);
+            }
+        }
+    }
 }

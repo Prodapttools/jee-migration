@@ -1,9 +1,15 @@
+
 package com.acme.anvil.service;
 
-import javax.ejb.EJBLocalObject;
-
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.acme.anvil.vo.Item;
 
-public interface ItemLookupLocal extends EJBLocalObject {
-	public Item lookupItem(long id);
+@Service
+public class ItemLookupService {
+
+    @Transactional
+    public Item lookupItem(long id) {
+        // Business logic to lookup item by id
+    }
 }

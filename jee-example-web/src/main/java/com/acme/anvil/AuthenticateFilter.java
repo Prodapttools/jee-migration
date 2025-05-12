@@ -1,3 +1,4 @@
+
 package com.acme.anvil;
 
 import java.io.IOException;
@@ -12,44 +13,42 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import weblogic.i18n.logging.NonCatalogLogger;
-import weblogic.servlet.security.ServletAuthentication;
-
+@Component
 public class AuthenticateFilter implements Filter {
 
-	private NonCatalogLogger ncl = new NonCatalogLogger("AuthenticateFilter");
-	
-	public void destroy() {
-		ncl.debug("AuthenticateFilter destroy.");
-	}
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticateFilter.class);
 
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-	    HttpServletRequest request = (HttpServletRequest)req;
-	    HttpSession session = request.getSession();
-	    
-		ncl.debug("AuthenticateFilter doFilter.");
-		if(req.getAttribute("cancelSession") != null) {
-			ncl.info("Cancelled session due to session timeout.");
-			ServletAuthentication.invalidateAll(request);
-		}
-		else if(session != null) {
-			Date fiveMinutesAgo = DateUtils.addMinutes(new Date(), -5);
-			//check that the time the session was last accessed was after 5 minutes ago..
-			Date timeLastAccessed = new Date(session.getLastAccessedTime());
-			
-			if(timeLastAccessed.before(fiveMinutesAgo)) {
-				session.invalidate();
-				//make the user log back in.
-				ServletAuthentication.invalidateAll(request);
-			}
-		}
-		
-	}
+    public void destroy() {
+        logger.debug("AuthenticateFilter destroy.");
+    }
 
-	public void init(FilterConfig config) throws ServletException {
-		ncl.debug("AuthenticateFilter init.");
-	}
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpSession session = request.getSession();
 
+        logger.debug("AuthenticateFilter doFilter.");
+        if (req.getAttribute("cancelSession") != null) {
+            logger.info("Cancelled session due to session timeout.");
+            session.invalidate();
+        } else if (session != null) {
+            Date fiveMinutesAgo = DateUtils.addMinutes(new Date(), -5);
+            Date timeLastAccessed = new Date(session.getLastAccessedTime());
+
+            if (timeLastAccessed.before(fiveMinutesAgo)) {
+                session.invalidate();
+                logger.info("Session invalidated due to inactivity. User must log back in.");
+            }
+        }
+
+        chain.doFilter(req, resp);
+    }
+
+    public void init(FilterConfig config) throws ServletException {
+        logger.debug("AuthenticateFilter init.");
+    }
 }

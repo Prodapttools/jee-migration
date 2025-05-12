@@ -1,8 +1,18 @@
+
 package com.acme.anvil.management;
 
-public interface AnvilInvokeBean {
+import org.springframework.stereotype.Service;
 
-	public abstract void addInvoked();
-	public abstract int getInvoked();
+@Service
+public class AnvilInvokeService {
 
+    private int invokedCount = 0;
+
+    public void addInvoked() {
+        invokedCount++;
+    }
+
+    public int getInvoked() {
+        return invokedCount;
+    }
 }
