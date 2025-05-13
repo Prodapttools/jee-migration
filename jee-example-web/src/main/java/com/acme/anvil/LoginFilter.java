@@ -1,41 +1,42 @@
-package com.acme.anvil;
 
-import java.io.IOException;
-import java.util.Date;
+package com.acme.anvil.filter;
 
-import javax.servlet.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-import org.apache.commons.lang.time.DateUtils;
+@Component
+public class LoginFilter extends OncePerRequestFilter {
 
-import weblogic.i18n.logging.NonCatalogLogger;
-import weblogic.servlet.security.ServletAuthentication;
+    private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
-public class LoginFilter implements Filter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        // Implement your session validation logic here
+        // ...
 
-	private NonCatalogLogger ncl = new NonCatalogLogger("LoginFilter");
-	
+        logger.debug("Processing request in LoginFilter");
 
-	public void destroy() {
-		ncl.debug("LoginFilter destroy.");
-	}
+        filterChain.doFilter(request, response);
+    }
 
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)resp;
-		
-	    HttpSession session = request.getSession();
-	    //...
-	}
+    @Override
+    public void destroy() {
+        logger.debug("LoginFilter destroyed.");
+    }
 
-	public void init(FilterConfig config) throws ServletException {
-		ncl.debug("LoginFilter init.");
-	}
+    @Override
+    public void init() {
+        logger.debug("LoginFilter initialized.");
+    }
 }
