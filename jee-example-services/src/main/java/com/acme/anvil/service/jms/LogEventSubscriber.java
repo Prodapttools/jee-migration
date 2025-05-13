@@ -1,45 +1,48 @@
+
 package com.acme.anvil.service.jms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 
-import javax.ejb.MessageDrivenBean;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-
-import org.apache.log4j.Logger;
-
 import com.acme.anvil.vo.LogEvent;
 
-import weblogic.ejb.GenericMessageDrivenBean;
-import weblogic.ejbgen.MessageDriven;
+@Service
+public class LogEventSubscriber {
 
-@MessageDriven(
-   ejbName = "LogEventSubscriber",
-   destinationJndiName = "jms/LogEventQueue",
-   destinationType = "javax.jms.Topic",
-   runAsPrincipalName = "anvil_user",
-   runAs = "anvil_user"
-)
-public class LogEventSubscriber extends GenericMessageDrivenBean implements MessageDrivenBean, MessageListener {
+    private static final Logger LOG = LoggerFactory.getLogger(LogEventSubscriber.class);
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss z");
 
-	private static final Logger LOG = Logger.getLogger(LogEventSubscriber.class);
-	private static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss z");
-	
-	public void onMessage(Message msg) {
-		ObjectMessage om = (ObjectMessage)msg;
-		Object obj;
-		try {
-			obj = om.getObject();
-			
-			if(obj instanceof LogEvent) {
-				LogEvent event = (LogEvent)obj;
-				LOG.info("Log Event ["+SDF.format(event.getDate())+"] : "+event.getMessage());
-			}
-		} catch (JMSException e) {
-			LOG.error("Exception reading message.", e);
-		}
-	}
+    @JmsListener(destination = "jms/LogEventQueue")
+    public void onMessage(LogEvent event) {
+        if (event != null) {
+            LOG.info("Log Event [{}] : {}", SDF.format(event.getDate()), event.getMessage());
+        }
+    }
 }
+
+
+### Additional Configuration
+
+In your `application.properties` or `application.yml`, you will need to configure the JMS settings, for example:
+
+properties
+spring.activemq.broker-url=tcp://localhost:61616
+spring.activemq.user=admin
+spring.activemq.password=admin
+
+
+Make sure to include the necessary dependencies in your `pom.xml`:
+
+xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-activemq</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+</dependency>

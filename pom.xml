@@ -4,44 +4,37 @@
 	<artifactId>jee-example</artifactId>
 	<version>1.0.0</version>
 	<name>JEE Example</name>
+	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>org.migration.support</groupId>
-			<artifactId>migration-support</artifactId>
-			<version>1.0.0</version>
-			<scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.6</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.ejb</groupId>
-			<artifactId>ejb-api</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 	</dependencies>
-	<packaging>pom</packaging>
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.jboss.windup</groupId>
-				<artifactId>windup-maven-plugin</artifactId>
-				<configuration>
-					<packages>
-						<package>com.acme</package>
-					</packages>
-					<source>true</source>
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-	<modules>
-		<module>jee-example-services</module>
-		<module>jee-example-web</module>
-		<module>jee-example-app</module>
-	</modules>
-	<description>Example EAR, WAR, EJB JAR that use Weblogic vendor specific APIs.  </description>
+	<description>Example Spring Boot application migrated from WebLogic with JPA and REST capabilities.</description>
 </project>

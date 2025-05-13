@@ -1,51 +1,86 @@
-package com.acme.anvil;
 
-import java.io.IOException;
+package com.acme.anvil.controller;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import com.acme.anvil.service.ItemLookupService;
 
-import com.acme.anvil.service.ItemLookupLocal;
-import com.acme.anvil.service.ItemLookupLocalHome;
+@RestController
+public class AnvilController {
 
-public class AnvilWebServlet extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(AnvilController.class);
 
-	private static final Logger LOG = Logger.getLogger(AnvilWebServlet.class);
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		InitialContext ic;
-		ItemLookupLocalHome lh;
-		ItemLookupLocal local;
-		try {
-			ic = new InitialContext();
-			lh  = (ItemLookupLocalHome)ic.lookup("ejb/ItemLookupLocal");
-			local = lh.create();
-			
-			String itemId = req.getParameter("id");
-			if(StringUtils.isNotBlank(itemId)) {
-				Long id = Long.parseLong(itemId);
-				local.lookupItem(id);
-			}
-		} catch (EJBException e) {
-			LOG.error("Exception creating EJB.", e);
-		} catch (CreateException e) {
-			LOG.error("Exception creating EJB.", e);
-		} catch (NamingException e) {
-			LOG.error("Exception looking up EJB LocalHome.", e);
-		}
-		
-		
-		
-	}
+    private final ItemLookupService itemLookupService;
+
+    @Autowired
+    public AnvilController(ItemLookupService itemLookupService) {
+        this.itemLookupService = itemLookupService;
+    }
+
+    @GetMapping("/lookupItem")
+    public void lookupItem(@RequestParam("id") String itemId) {
+        if (itemId != null && !itemId.trim().isEmpty()) {
+            try {
+                Long id = Long.parseLong(itemId);
+                itemLookupService.lookupItem(id);
+            } catch (NumberFormatException e) {
+                LOG.error("Invalid item ID format: {}", itemId, e);
+            }
+        } else {
+            LOG.warn("Item ID is blank or null.");
+        }
+    }
 }
+
+
+
+package com.acme.anvil.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class ItemLookupService {
+
+    @Transactional
+    public void lookupItem(Long id) {
+        // Implement the logic to lookup the item by id
+    }
+}
+
+
+yaml
+# application.yml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/yourdb
+    username: yourusername
+    password: yourpassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+xml
+<!-- pom.xml -->
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <!-- Add other necessary dependencies -->
+</dependencies>
