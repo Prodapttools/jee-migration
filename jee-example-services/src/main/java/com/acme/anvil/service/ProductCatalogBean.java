@@ -1,36 +1,18 @@
+
 package com.acme.anvil.service;
 
-import java.rmi.RemoteException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
+@Service
+public class ProductCatalogBean {
 
-import weblogic.i18n.logging.NonCatalogLogger;
+    private static final Logger LOG = LoggerFactory.getLogger(ProductCatalogBean.class);
 
-public class ProductCatalogBean implements SessionBean {
+    public void populateCatalog() {
+        LOG.info("Do something.");
+    }
 
-	private static final NonCatalogLogger LOG = new NonCatalogLogger("ProductCatalogBean");
-	
-	private SessionContext sessionContext;
-	
-	public void setSessionContext(SessionContext ctx) throws EJBException, RemoteException {
-		this.sessionContext = sessionContext;
-	}
-
-	public void ejbRemove() throws EJBException, RemoteException {
-		LOG.info("Called Remove.");
-	}
-
-	public void ejbActivate() throws EJBException, RemoteException {
-		LOG.info("Called Activate");
-	}
-
-	public void ejbPassivate() throws EJBException, RemoteException {
-		LOG.info("Called Passivate");
-	}
-	
-	public void populateCatalog() {
-		LOG.info("Do something.");
-	}
+    // TODO: Implement any necessary lifecycle methods if needed
 }

@@ -1,33 +1,20 @@
+
 package com.acme.anvil.management;
 
-import javax.management.NotCompliantMBeanException;
-import javax.management.StandardMBean;
+import org.springframework.stereotype.Component;
 
-/**
- * 
- * Provides a standard JMX bean.
- * @author bradsdavis
- *
- */
-public class AnvilInvokeBeanImpl extends StandardMBean implements AnvilInvokeBean {
+@Component
+public class AnvilInvokeBeanImpl implements AnvilInvokeBean {
 
-	public AnvilInvokeBeanImpl() throws NotCompliantMBeanException {
-		super(AnvilInvokeBean.class);
-	}
+    private int invoked = 0;
 
-	private int invoked = 0;
-	
-	/* (non-Javadoc)
-	 * @see com.acme.anvil.management.AnvilInvokeBean#addInvoked()
-	 */
-	public void addInvoked() {
-		invoked++;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.acme.anvil.management.AnvilInvokeBean#getInvoked()
-	 */
-	public int getInvoked() {
-		return invoked;
-	}
+    @Override
+    public void addInvoked() {
+        invoked++;
+    }
+
+    @Override
+    public int getInvoked() {
+        return invoked;
+    }
 }

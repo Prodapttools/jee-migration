@@ -1,9 +1,13 @@
+
 package com.acme.anvil.service;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EJBLocalHome;
+import org.springframework.stereotype.Component;
 
-public interface ItemLookupLocalHome extends EJBLocalHome {
-	ItemLookupLocal create() throws CreateException, EJBException;
+@Component
+public class ItemLookupLocalHome {
+
+    public ItemLookupLocal create() {
+        // TODO: Implement the creation logic for ItemLookupLocal
+        return new ItemLookupLocal();
+    }
 }

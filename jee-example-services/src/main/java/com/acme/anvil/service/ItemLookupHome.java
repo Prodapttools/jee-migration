@@ -1,11 +1,13 @@
+
 package com.acme.anvil.service;
 
-import java.rmi.RemoteException;
+import org.springframework.stereotype.Component;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EJBHome;
-
-public interface ItemLookupHome extends EJBHome {
-	ItemLookup create() throws CreateException, EJBException, RemoteException;
+@Component
+public class ItemLookupHome {
+    // TODO: Implement the create method logic as per the original functionality
+    public ItemLookup create() {
+        // TODO: Replace with actual implementation
+        return new ItemLookup();
+    }
 }
