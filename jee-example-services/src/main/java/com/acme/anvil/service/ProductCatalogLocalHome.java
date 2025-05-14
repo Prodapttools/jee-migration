@@ -1,9 +1,15 @@
+
 package com.acme.anvil.service;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EJBLocalHome;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface ProductCatalogLocalHome extends EJBLocalHome {
-	ProductCatalogLocal create() throws CreateException, EJBException;
+@Service
+public class ProductCatalogService {
+
+    @Transactional
+    public ProductCatalog create() {
+        // TODO: Implement the creation logic for ProductCatalog
+        return new ProductCatalog();
+    }
 }
