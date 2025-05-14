@@ -1,7 +1,14 @@
+
 package com.acme.anvil.service;
 
-import javax.ejb.EJBLocalObject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface ProductCatalogLocal extends EJBLocalObject {
-	public void populateCatalog();
+@Service
+public class ProductCatalogService {
+
+    @Transactional
+    public void populateCatalog() {
+        // TODO: Implement the logic to populate the catalog
+    }
 }

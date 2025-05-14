@@ -1,8 +1,7 @@
+
 package com.acme.anvil;
 
 import java.io.IOException;
-import java.util.Date;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,29 +12,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.time.DateUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import weblogic.i18n.logging.NonCatalogLogger;
-import weblogic.servlet.security.ServletAuthentication;
-
+@Slf4j
+@Component
 public class LoginFilter implements Filter {
 
-	private NonCatalogLogger ncl = new NonCatalogLogger("LoginFilter");
-	
+    @Override
+    public void destroy() {
+        log.debug("LoginFilter destroy.");
+    }
 
-	public void destroy() {
-		ncl.debug("LoginFilter destroy.");
-	}
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)resp;
-		
-	    HttpSession session = request.getSession();
-	    //...
-	}
+        HttpSession session = request.getSession();
+        // TODO: Implement session validation logic here
 
-	public void init(FilterConfig config) throws ServletException {
-		ncl.debug("LoginFilter init.");
-	}
+        chain.doFilter(req, resp);
+    }
+
+    @Override
+    public void init(FilterConfig config) throws ServletException {
+        log.debug("LoginFilter init.");
+    }
 }
